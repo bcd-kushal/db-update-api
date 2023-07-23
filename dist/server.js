@@ -61,8 +61,14 @@ app.post('/register', check_db_url_1.default, (req, res) => __awaiter(void 0, vo
     const { discordUID, genshinUID, region, ltoken, ltuid, cookie_token, password } = req.body;
     const table_name = "RegisteredUsers";
     const [disc_id, gen_id, reg, l_token, l_uid, cookie, pass] = [discordUID, genshinUID, region, ltoken, ltuid, cookie_token, password];
+    //if lock = 1 then exit else continue
+    const checkLockQuery = `select isLocked from ${table_name} where discordUID=${disc_id}`;
+    const [lock_rows] = yield (yield conn).query(checkLockQuery);
+    res.status(200).json(lock_rows);
+    return;
+    const lock_status = 0;
     //perfectly runs up till here
-    const query = `insert into ${table_name}(discordUID,genshinUID,region,ltoken,ltuid,cookieToken,password) values(${disc_id},${gen_id},'${reg}','${l_token}','${l_uid}','${cookie}','${pass}')`;
+    const query = `insert into ${table_name}(discordUID,genshinUID,region,ltoken,ltuid,cookieToken, isLocked,password) values(${disc_id},${gen_id},'${reg}','${l_token}','${l_uid}','${cookie}','${lock_status}','${pass}')`;
     const [rows] = yield (yield conn).query(query); /*
 
     const responseObj = {
