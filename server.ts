@@ -47,11 +47,12 @@ app.post('/register', checkDB_URL, async (req,res) => {
     const table_name = "RegisteredUsers"
     const [ disc_id, gen_id, reg, l_token, l_uid, cookie, pass ] = [ discordUID, genshinUID, region, ltoken, ltuid, cookie_token, password ]
     
+    //perfectly runs up till here
     
     
-    //const query = `insert into ${table_name}(discordUID,genshinUID,region,ltoken,ltuid,cookieToken,password) values(${disc_id},${gen_id},${reg},${l_token},${l_uid},${cookie},${pass})`
+    const query = `insert into ${table_name}(discordUID,genshinUID,region,ltoken,ltuid,cookieToken,password) values(${disc_id},${gen_id},${reg},${l_token},${l_uid},${cookie},${pass})`
 
-    //const [rows] = await (await conn).query(query);
+    const [rows] = await (await conn).query(query);/* 
 
     const responseObj = {
         msg:table_name,
@@ -60,8 +61,8 @@ app.post('/register', checkDB_URL, async (req,res) => {
         GUID: gen_id,
         password: pass,
         maxCores: os.cpus().length
-    }
-    res.status(200).json(responseObj)
+    } */
+    res.status(200).json(rows)
 
 
     //res.status(200).json({ msg: `${req.method} request received at route: ${req.url}` })
