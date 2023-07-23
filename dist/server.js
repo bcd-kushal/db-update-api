@@ -71,7 +71,7 @@ app.post('/register', check_db_url_1.default, (req, res) => __awaiter(void 0, vo
     const checkLockQuery = `select ${field} from ${table_name} where discordUID=${disc_id}`;
     const [lock_rows] = yield (yield islock_conn).query(checkLockQuery);
     const a = Object.values(JSON.parse(JSON.stringify(lock_rows)));
-    res.status(200).json({ locked: a });
+    res.status(200).json({ locked: a[0][field] });
     return;
     const lock_status = 0;
     //perfectly runs up till here

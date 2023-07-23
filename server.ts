@@ -61,7 +61,7 @@ app.post('/register', checkDB_URL, async (req,res) => {
 
     const a = Object.values(JSON.parse(JSON.stringify(lock_rows)))
 
-    res.status(200).json({ locked:a })
+    res.status(200).json({ locked:a[0][field] })
     return
 
     const lock_status = 0
