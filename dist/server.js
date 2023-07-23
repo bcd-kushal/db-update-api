@@ -39,6 +39,7 @@ const express_1 = __importStar(require("express"));
 const cors_1 = __importDefault(require("cors"));
 require("dotenv/config");
 const promise_1 = __importDefault(require("mysql2/promise"));
+const os_1 = __importDefault(require("os"));
 //middlewares -----------------------------------------------------
 const check_port_1 = __importDefault(require("./middlewares/check_port"));
 const check_request_type_1 = __importDefault(require("./middlewares/check_request_type"));
@@ -58,12 +59,20 @@ app.use(check_request_type_1.default); //if GET then reject request
 app.use((0, cors_1.default)());
 app.use((0, express_1.json)());
 app.post('/register', check_db_url_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    //const { discordUID, genshinUID, region, ltoken, ltuid, cookie_token, password } = req.body
+    const { discordUID, genshinUID, region, ltoken, ltuid, cookie_token, password } = req.body;
     const table_name = "RegisteredUsers";
-    //const [ disc_id, gen_id, reg, l_token, l_uid, cookie, pass ] = [ discordUID, genshinUID, region, ltoken, ltuid, cookie_token, password ]
+    const [disc_id, gen_id, reg, l_token, l_uid, cookie, pass] = [discordUID, genshinUID, region, ltoken, ltuid, cookie_token, password];
     //const query = `insert into ${table_name}(discordUID,genshinUID,region,ltoken,ltuid,cookieToken,password) values(${disc_id},${gen_id},${reg},${l_token},${l_uid},${cookie},${pass})`
     //const [rows] = await (await conn).query(query);
-    res.status(200).json({ msg: table_name });
+    const responseObj = {
+        msg: table_name,
+        disc_id: disc_id,
+        cook: cookie,
+        GUID: gen_id,
+        password: pass,
+        maxCores: os_1.default.cpus().length
+    };
+    res.status(200).json(responseObj);
     //res.status(200).json({ msg: `${req.method} request received at route: ${req.url}` })
 }));
 app.patch('/', (req, res) => {

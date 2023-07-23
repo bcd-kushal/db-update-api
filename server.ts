@@ -3,6 +3,7 @@ import cluster from "cluster"
 import cors from "cors"
 import "dotenv/config"
 import mysql from "mysql2/promise"
+import os from "os";
 
 //middlewares -----------------------------------------------------
 import checkPORT from "./middlewares/check_port"
@@ -41,10 +42,10 @@ app.use(json())
 
 app.post('/register', checkDB_URL, async (req,res) => {
 
-    //const { discordUID, genshinUID, region, ltoken, ltuid, cookie_token, password } = req.body
+    const { discordUID, genshinUID, region, ltoken, ltuid, cookie_token, password } = req.body
 
     const table_name = "RegisteredUsers"
-    //const [ disc_id, gen_id, reg, l_token, l_uid, cookie, pass ] = [ discordUID, genshinUID, region, ltoken, ltuid, cookie_token, password ]
+    const [ disc_id, gen_id, reg, l_token, l_uid, cookie, pass ] = [ discordUID, genshinUID, region, ltoken, ltuid, cookie_token, password ]
     
     
     
@@ -52,7 +53,15 @@ app.post('/register', checkDB_URL, async (req,res) => {
 
     //const [rows] = await (await conn).query(query);
 
-    res.status(200).json({msg:table_name});
+    const responseObj = {
+        msg:table_name,
+        disc_id: disc_id,
+        cook: cookie,
+        GUID: gen_id,
+        password: pass,
+        maxCores: os.cpus().length
+    }
+    res.status(200).json(responseObj)
 
 
     //res.status(200).json({ msg: `${req.method} request received at route: ${req.url}` })
