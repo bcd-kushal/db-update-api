@@ -70,7 +70,7 @@ app.post('/register', check_db_url_1.default, (req, res) => __awaiter(void 0, vo
     //if lock = 1 then exit else continue
     const checkLockQuery = `select ${field} from ${table_name} where discordUID=${disc_id}`;
     const [lock_rows] = yield (yield islock_conn).query(checkLockQuery);
-    const a = lock_rows.constructor.toString();
+    const a = Object.values(JSON.parse(JSON.stringify(lock_rows)));
     res.status(200).json({ locked: a });
     return;
     const lock_status = 0;

@@ -59,7 +59,7 @@ app.post('/register', checkDB_URL, async (req,res) => {
     const checkLockQuery = `select ${field} from ${table_name} where discordUID=${disc_id}`
     const [lock_rows] = await (await islock_conn).query(checkLockQuery)
 
-    const a = lock_rows.constructor.toString()
+    const a = Object.values(JSON.parse(JSON.stringify(lock_rows)))
 
     res.status(200).json({ locked:a })
     return
