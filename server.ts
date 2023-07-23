@@ -16,10 +16,17 @@ const PORT = process.env.PORT || ""
 
 // PLANETSCALE connections ----------------------------------
 const pscale_read_url = process.env.PSCALE_WRITE_URL || "";
+const pscale_check_lock_url = process.env.PSCALE_CHECK_LOCK_URL || "";
+
 const pscale_conn = async () => {
     return await mysql.createConnection(pscale_read_url);
 };
+const lock_conn = async () => {
+    return await mysql.createConnection(pscale_check_lock_url);
+};
+
 const conn = pscale_conn(); 
+const islock_conn = lock_conn();
 //           ^ this needs to be awaited but top-level await somwhow isnt transpiling to a successsful dockerized container
 
 
@@ -49,7 +56,7 @@ app.post('/register', checkDB_URL, async (req,res) => {
 
     //if lock = 1 then exit else continue
     const checkLockQuery = `select isLocked from ${table_name} where discordUID=${disc_id}`
-    const [lock_rows] = await (await conn).query(checkLockQuery)
+    const [lock_rows] = await (await islock_conn).query(checkLockQuery)
 
     res.status(200).json(lock_rows)
     return

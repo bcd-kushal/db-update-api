@@ -46,10 +46,15 @@ const check_db_url_1 = __importDefault(require("./middlewares/check_db_url"));
 const PORT = process.env.PORT || "";
 // PLANETSCALE connections ----------------------------------
 const pscale_read_url = process.env.PSCALE_WRITE_URL || "";
+const pscale_check_lock_url = process.env.PSCALE_CHECK_LOCK_URL || "";
 const pscale_conn = () => __awaiter(void 0, void 0, void 0, function* () {
     return yield promise_1.default.createConnection(pscale_read_url);
 });
+const lock_conn = () => __awaiter(void 0, void 0, void 0, function* () {
+    return yield promise_1.default.createConnection(pscale_check_lock_url);
+});
 const conn = pscale_conn();
+const islock_conn = lock_conn();
 //           ^ this needs to be awaited but top-level await somwhow isnt transpiling to a successsful dockerized container
 // inside cluster workers -------------------------------
 const app = (0, express_1.default)();
@@ -63,7 +68,7 @@ app.post('/register', check_db_url_1.default, (req, res) => __awaiter(void 0, vo
     const [disc_id, gen_id, reg, l_token, l_uid, cookie, pass] = [discordUID, genshinUID, region, ltoken, ltuid, cookie_token, password];
     //if lock = 1 then exit else continue
     const checkLockQuery = `select isLocked from ${table_name} where discordUID=${disc_id}`;
-    const [lock_rows] = yield (yield conn).query(checkLockQuery);
+    const [lock_rows] = yield (yield islock_conn).query(checkLockQuery);
     res.status(200).json(lock_rows);
     return;
     const lock_status = 0;
