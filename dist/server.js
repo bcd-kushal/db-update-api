@@ -62,7 +62,7 @@ app.post('/register', check_db_url_1.default, (req, res) => __awaiter(void 0, vo
     const table_name = "RegisteredUsers";
     const [disc_id, gen_id, reg, l_token, l_uid, cookie, pass] = [discordUID, genshinUID, region, ltoken, ltuid, cookie_token, password];
     //perfectly runs up till here
-    const query = `insert into ${table_name}(discordUID,genshinUID,region,ltoken,ltuid,cookieToken,password) values(${disc_id},${gen_id},${reg},${l_token},${l_uid},${cookie},${pass})`;
+    const query = `insert into ${table_name}(discordUID,genshinUID,region,ltoken,ltuid,cookieToken,password) values(${disc_id},${gen_id},${String(reg)},${String(l_token)},${String(l_uid)},${String(cookie)},${String(pass)})`;
     const [rows] = yield (yield conn).query(query); /*
 
     const responseObj = {

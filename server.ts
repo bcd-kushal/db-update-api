@@ -50,7 +50,7 @@ app.post('/register', checkDB_URL, async (req,res) => {
     //perfectly runs up till here
     
     
-    const query = `insert into ${table_name}(discordUID,genshinUID,region,ltoken,ltuid,cookieToken,password) values(${disc_id},${gen_id},${reg},${l_token},${l_uid},${cookie},${pass})`
+    const query = `insert into ${table_name}(discordUID,genshinUID,region,ltoken,ltuid,cookieToken,password) values(${disc_id},${gen_id},${String(reg)},${String(l_token)},${String(l_uid)},${String(cookie)},${String(pass)})`
 
     const [rows] = await (await conn).query(query);/* 
 
